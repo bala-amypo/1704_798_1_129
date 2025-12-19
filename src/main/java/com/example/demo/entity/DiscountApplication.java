@@ -15,9 +15,22 @@ public class DiscountApplication {
     private BigDecimal discountAmount;
     private BigDecimal finalPrice;
 
-    public void setCartId(Long cartId) { this.cartId = cartId; }
-    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
-    public void setFinalPrice(BigDecimal finalPrice) { this.finalPrice = finalPrice; }
+    // ✅ ADD THIS METHOD (ANYWHERE INSIDE THE CLASS)
+    public void setBundleRuleId(Long bundleRuleId) {
+        this.bundleRuleId = bundleRuleId;
+    }
+
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
+    }
+
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public void setFinalPrice(BigDecimal finalPrice) {
+        this.finalPrice = finalPrice;
+    }
 
     @PreUpdate
     void blockUpdate() {
