@@ -15,6 +15,10 @@ public class DiscountApplication {
     private BigDecimal discountAmount;
     private BigDecimal finalPrice;
 
+    public void setCartId(Long cartId) { this.cartId = cartId; }
+    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
+    public void setFinalPrice(BigDecimal finalPrice) { this.finalPrice = finalPrice; }
+
     @PreUpdate
     void blockUpdate() {
         throw new UnsupportedOperationException();

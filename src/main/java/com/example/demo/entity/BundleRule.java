@@ -9,7 +9,10 @@ public class BundleRule {
     @GeneratedValue
     private Long id;
 
-    private String productIdsCsv;
-    private int discountPercentage;
+    private String productIds;
+    private double discountPercentage;
     private boolean active;
+
+    public Long getId() { return id; }
+    public double getDiscountPercentage() { return discountPercentage; }
 }

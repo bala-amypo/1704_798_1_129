@@ -16,4 +16,10 @@ public class CartItem {
     private Product product;
 
     private int quantity;
+
+    public Product getProduct() { return product; }
+    public int getQuantity() { return quantity; }
+    public void setCart(Cart cart) { this.cart = cart; }
+    public void setProduct(Product product) { this.product = product; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 }
