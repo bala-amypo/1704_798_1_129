@@ -7,33 +7,38 @@ import java.math.BigDecimal;
 public class DiscountApplication {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long cartId;
-    private Long bundleRuleId;
+    private String description;
     private BigDecimal discountAmount;
-    private BigDecimal finalPrice;
 
-    // ✅ ADD THIS METHOD (ANYWHERE INSIDE THE CLASS)
-    public void setBundleRuleId(Long bundleRuleId) {
-        this.bundleRuleId = bundleRuleId;
+    public Long getId() {
+        return id;
+    }
+
+    public Long getCartId() {
+        return cartId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
     }
 
     public void setCartId(Long cartId) {
         this.cartId = cartId;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setDiscountAmount(BigDecimal discountAmount) {
         this.discountAmount = discountAmount;
-    }
-
-    public void setFinalPrice(BigDecimal finalPrice) {
-        this.finalPrice = finalPrice;
-    }
-
-    @PreUpdate
-    void blockUpdate() {
-        throw new UnsupportedOperationException();
     }
 }

@@ -1,18 +1,34 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 public class Cart {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
+    private Long userId;
+    private boolean active;
 
-    @OneToMany(mappedBy = "cart")
-    private List<CartItem> items;
+    public Long getId() {
+        return id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
