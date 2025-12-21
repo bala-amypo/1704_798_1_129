@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.DiscountApplication;
+import com.example.demo.entity.DiscountApplication;
 import com.example.demo.service.impl.DiscountServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +17,7 @@ public class DiscountController {
     }
 
     @PostMapping("/evaluate/{cartId}")
-    public List<DiscountApplication> evaluateDiscounts(
-            @PathVariable Long cartId) {
+    public List<DiscountApplication> evaluate(@PathVariable Long cartId) {
         return discountService.evaluateDiscounts(cartId);
     }
 }
