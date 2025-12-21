@@ -4,8 +4,6 @@ import com.example.demo.entity.Product;
 import com.example.demo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ProductServiceImpl {
 
@@ -17,27 +15,33 @@ public class ProductServiceImpl {
 
     // CREATE
     public Product createProduct(Product product) {
+        product.setActive(true);
         return productRepository.save(product);
     }
 
     // UPDATE
-    public Product updateProduct(Long id, Product product) {
-        product.setId(id);
-        return productRepository.save(product);
+    public Product updateProduct(Long id, Product updatedProduct) {
+        Product existing = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        existing.setName(updatedProduct.getName());
+        existing.setPrice(updatedProduct.getPrice());
+
+        return productRepository.save(existing);
     }
 
-    // READ BY ID
+    // READ
     public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
-    // READ ALL
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
-
-    // DELETE / DEACTIVATE
+    // SOFT DELETE
     public void deactivateProduct(Long id) {
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        product.setActive(false);
+        productRepository.save(product);
     }
 }
