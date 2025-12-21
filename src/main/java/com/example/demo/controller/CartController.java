@@ -1,9 +1,26 @@
-ProductController ✅ (most important for review)
+package com.example.demo.controller;
 
-CartController
+import com.example.demo.model.Cart;
+import com.example.demo.service.impl.CartServiceImpl;
+import org.springframework.web.bind.annotation.*;
 
-CartItemController
+@RestController
+@RequestMapping("/api/carts")
+public class CartController {
 
-BundleRuleController
+    private final CartServiceImpl cartService;
 
-DiscountController
+    public CartController(CartServiceImpl cartService) {
+        this.cartService = cartService;
+    }
+
+    @PostMapping("/user/{userId}")
+    public Cart createCart(@PathVariable Long userId) {
+        return cartService.createCart(userId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public Cart getActiveCart(@PathVariable Long userId) {
+        return cartService.getActiveCartForUser(userId);
+    }
+}
