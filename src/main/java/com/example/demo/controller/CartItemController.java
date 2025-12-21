@@ -17,12 +17,17 @@ public class CartItemController {
     }
 
     @PostMapping
-    public CartItem addItem(@RequestBody CartItem cartItem) {
-        return cartItemService.addItemToCart(cartItem);
+    public CartItem create(@RequestBody CartItem item) {
+        return cartItemService.save(item);
     }
 
-    @GetMapping("/cart/{cartId}")
-    public List<CartItem> getItems(@PathVariable Long cartId) {
-        return cartItemService.getItemsForCart(cartId);
+    @GetMapping
+    public List<CartItem> getAll() {
+        return cartItemService.findAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        cartItemService.deleteById(id);
     }
 }

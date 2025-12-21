@@ -16,8 +16,18 @@ public class DiscountController {
         this.discountService = discountService;
     }
 
-    @PostMapping("/evaluate/{cartId}")
-    public List<DiscountApplication> evaluate(@PathVariable Long cartId) {
-        return discountService.evaluateDiscounts(cartId);
+    @PostMapping
+    public DiscountApplication create(@RequestBody DiscountApplication discount) {
+        return discountService.save(discount);
+    }
+
+    @GetMapping
+    public List<DiscountApplication> getAll() {
+        return discountService.findAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        discountService.deleteById(id);
     }
 }
