@@ -15,19 +15,29 @@ public class ProductServiceImpl {
         this.productRepository = productRepository;
     }
 
-    public Product save(Product product) {
+    // CREATE
+    public Product createProduct(Product product) {
         return productRepository.save(product);
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    // UPDATE
+    public Product updateProduct(Long id, Product product) {
+        product.setId(id);
+        return productRepository.save(product);
     }
 
-    public Product findById(Long id) {
+    // READ BY ID
+    public Product getProductById(Long id) {
         return productRepository.findById(id).orElse(null);
     }
 
-    public void deleteById(Long id) {
+    // READ ALL
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    // DELETE / DEACTIVATE
+    public void deactivateProduct(Long id) {
         productRepository.deleteById(id);
     }
 }
