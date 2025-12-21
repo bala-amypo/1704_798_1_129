@@ -4,6 +4,8 @@ import com.example.demo.entity.Cart;
 import com.example.demo.service.impl.CartServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
@@ -14,13 +16,23 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @PostMapping("/user/{userId}")
-    public Cart createCart(@PathVariable Long userId) {
-        return cartService.createCart(userId);
+    @PostMapping
+    public Cart create(@RequestBody Cart cart) {
+        return cartService.save(cart);
     }
 
-    @GetMapping("/user/{userId}")
-    public Cart getActiveCart(@PathVariable Long userId) {
-        return cartService.getActiveCartForUser(userId);
+    @GetMapping
+    public List<Cart> getAll() {
+        return cartService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Cart getById(@PathVariable Long id) {
+        return cartService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        cartService.deleteById(id);
     }
 }
