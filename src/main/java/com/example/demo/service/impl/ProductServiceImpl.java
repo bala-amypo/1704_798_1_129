@@ -15,31 +15,19 @@ public class ProductServiceImpl {
         this.productRepository = productRepository;
     }
 
-    public Product createProduct(Product product) {
-        product.setActive(true);
+    public Product save(Product product) {
         return productRepository.save(product);
     }
 
-    public Product updateProduct(Long id, Product updated) {
-        Product existing = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-        existing.setName(updated.getName());
-        existing.setPrice(updated.getPrice());
-        return productRepository.save(existing);
-    }
-
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-    }
-
-    public List<Product> getAllProducts() {
+    public List<Product> findAll() {
         return productRepository.findAll();
     }
 
-    public void deactivateProduct(Long id) {
-        Product product = getProductById(id);
-        product.setActive(false);
-        productRepository.save(product);
+    public Product findById(Long id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
     }
 }

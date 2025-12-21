@@ -1,9 +1,10 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Cart;
 import com.example.demo.entity.CartItem;
 import com.example.demo.repository.CartItemRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CartItemServiceImpl {
@@ -14,11 +15,15 @@ public class CartItemServiceImpl {
         this.cartItemRepository = cartItemRepository;
     }
 
-    public CartItem addItem(CartItem item) {
-        Cart cart = item.getCart();
-        if (!cart.getActive()) {
-            throw new RuntimeException("Cart is inactive");
-        }
+    public CartItem save(CartItem item) {
         return cartItemRepository.save(item);
+    }
+
+    public List<CartItem> findAll() {
+        return cartItemRepository.findAll();
+    }
+
+    public void deleteById(Long id) {
+        cartItemRepository.deleteById(id);
     }
 }
