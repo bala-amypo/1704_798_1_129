@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.config.JwtTokenProvider;
-import com.example.demo.entity.User;   // ✅ FIXED HERE
+import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AuthService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,5 +33,19 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return jwtTokenProvider.generateToken(email);
+    }
+
+    // ✅ REQUIRED METHOD (THIS FIXES ERROR 1)
+    @Override
+    public String register(String name, String email, String password) {
+
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+
+        userRepository.save(user);
+
+        return "User registered successfully";
     }
 }
