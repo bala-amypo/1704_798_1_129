@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.config.JwtTokenProvider;
+import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AuthService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,5 +22,17 @@ public class AuthServiceImpl implements AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // methods...
+    // 🔴 THIS METHOD MUST EXIST
+    @Override
+    public String login(String email, String password) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        return jwtTokenProvider.generateToken(email);
+    }
 }
