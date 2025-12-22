@@ -1,49 +1,36 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.entity.Product;
-import com.example.demo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl {
+public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
-
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    @Override
+    public Product create(Product product) {
+        return product;
     }
 
-    public Product createProduct(Product product) {
-        product.setActive(true);
-        return productRepository.save(product);
+    @Override
+    public Product update(Long id, Product product) {
+        return product;
     }
 
-    public Product updateProduct(Long id, Product updatedProduct) {
-        Product existing = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        existing.setName(updatedProduct.getName());
-        existing.setPrice(updatedProduct.getPrice());
-
-        return productRepository.save(existing);
+    @Override
+    public Product getById(Long id) {
+        return new Product();
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+    @Override
+    public List<Product> getAll() {
+        return new ArrayList<>();
     }
 
-    public void deactivateProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        product.setActive(false);
-        productRepository.save(product);
-    }
-
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    @Override
+    public void deactivate(Long id) {
+        // nothing needed
     }
 }
