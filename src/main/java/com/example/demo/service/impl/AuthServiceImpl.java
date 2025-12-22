@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.config.JwtTokenProvider;
-import com.example.demo.model.User;
+import com.example.demo.entity.User;   // ✅ FIXED HERE
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AuthService;
 import org.springframework.security.crypto.password.PasswordEncoder;
