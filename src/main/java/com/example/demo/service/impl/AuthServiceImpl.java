@@ -22,7 +22,6 @@ public class AuthServiceImpl implements AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // 🔴 THIS METHOD MUST EXIST
     @Override
     public String login(String email, String password) {
 
