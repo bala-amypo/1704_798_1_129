@@ -37,13 +37,13 @@ public class ProductController {
         return productService.getById(id);
     }
 
-    // GET /api/products
+
     @GetMapping
     public List<Product> listProducts() {
         return productService.getAll();
     }
 
-    // PUT /api/products/{id}/deactivate
+   
     @PutMapping("/{id}/deactivate")
     public void deactivateProduct(@PathVariable Long id) {
         productService.deactivate(id);
