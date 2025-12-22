@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
         return jwtTokenProvider.generateToken(email);
     }
 
-    // ✅ REQUIRED METHOD (THIS FIXES ERROR 1)
+    
     @Override
     public String register(String name, String email, String password) {
 
