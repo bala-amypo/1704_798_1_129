@@ -1,43 +1,51 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
-import com.example.demo.service.impl.ProductServiceImpl;
+import com.example.demo.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
+@Tag(name = "Products")
 public class ProductController {
 
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
-    public ProductController(ProductServiceImpl productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
+  
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public Product createProduct(@RequestBody Product product) {
+        return productService.create(product);
     }
 
+  
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product);
+    public Product updateProduct(@PathVariable Long id,
+                                 @RequestBody Product product) {
+        return productService.update(id, product);
     }
+
 
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
-        return productService.getProductById(id);
+    public Product getProduct(@PathVariable Long id) {
+        return productService.getById(id);
     }
 
+    // GET /api/products
     @GetMapping
-    public List<Product> getAll() {
-        return productService.getAllProducts();
+    public List<Product> listProducts() {
+        return productService.getAll();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        productService.deactivateProduct(id);
+    // PUT /api/products/{id}/deactivate
+    @PutMapping("/{id}/deactivate")
+    public void deactivateProduct(@PathVariable Long id) {
+        productService.deactivate(id);
     }
 }
