@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Product;
 import com.example.demo.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,32 +19,27 @@ public class ProductController {
         this.productService = productService;
     }
 
-  
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
+    public Product createProduct(@Valid @RequestBody Product product) {
         return productService.create(product);
     }
 
-  
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable Long id,
-                                 @RequestBody Product product) {
+                                 @Valid @RequestBody Product product) {
         return productService.update(id, product);
     }
-
 
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id) {
         return productService.getById(id);
     }
 
-
     @GetMapping
     public List<Product> listProducts() {
         return productService.getAll();
     }
 
-   
     @PutMapping("/{id}/deactivate")
     public void deactivateProduct(@PathVariable Long id) {
         productService.deactivate(id);
