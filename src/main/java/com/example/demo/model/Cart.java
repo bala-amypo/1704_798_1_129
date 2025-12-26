@@ -1,21 +1,25 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "carts")
 public class Cart {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long userId;
-    private boolean active = true;
+
+    private Boolean active = true;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
 
     public Cart() {
-    }
-
-    public Cart(Long userId) {
-        this.userId = userId;
-        this.active = true;
     }
 
     public Long getId() {
@@ -34,12 +38,11 @@ public class Cart {
         this.userId = userId;
     }
 
-    // 🔥 THESE TWO METHODS ARE MANDATORY
-    public boolean getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
