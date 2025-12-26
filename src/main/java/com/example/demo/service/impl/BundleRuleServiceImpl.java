@@ -3,9 +3,11 @@ package com.example.demo.service.impl;
 import com.example.demo.model.BundleRule;
 import com.example.demo.repository.BundleRuleRepository;
 import com.example.demo.service.BundleRuleService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service  
 public class BundleRuleServiceImpl implements BundleRuleService {
 
     private final BundleRuleRepository bundleRuleRepository;
@@ -16,21 +18,21 @@ public class BundleRuleServiceImpl implements BundleRuleService {
 
     @Override
     public BundleRule createRule(BundleRule rule) {
-        validateDiscount(rule);
         return bundleRuleRepository.save(rule);
     }
 
     @Override
     public BundleRule updateRule(Long id, BundleRule rule) {
-        validateDiscount(rule);
-        rule.setId(id);
+        BundleRule existing = bundleRuleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bundle rule not found"));
+        rule.setId(existing.getId());
         return bundleRuleRepository.save(rule);
     }
 
     @Override
     public BundleRule getRuleById(Long id) {
         return bundleRuleRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("BundleRule not found"));
+                .orElseThrow(() -> new RuntimeException("Bundle rule not found"));
     }
 
     @Override
@@ -43,14 +45,5 @@ public class BundleRuleServiceImpl implements BundleRuleService {
         BundleRule rule = getRuleById(id);
         rule.setActive(false);
         bundleRuleRepository.save(rule);
-    }
-
-    private void validateDiscount(BundleRule rule) {
-        if (rule.getDiscountPercentage() <= 0 ||
-            rule.getDiscountPercentage() > 100) {
-            throw new IllegalArgumentException(
-                "Discount percentage must be between 1 and 100"
-            );
-        }
     }
 }
