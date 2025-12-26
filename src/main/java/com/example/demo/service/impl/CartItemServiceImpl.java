@@ -8,6 +8,8 @@ import com.example.demo.repository.CartRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.CartItemService;
 
+import java.util.List;
+
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
@@ -40,7 +42,7 @@ public class CartItemServiceImpl implements CartItemService {
                 .orElse(null);
 
         if (item == null) {
-            item = new CartItem();   // ✅ NO-ARG constructor
+            item = new CartItem(); 
             item.setCart(cart);
             item.setProduct(product);
             item.setQuantity(quantity);
@@ -49,6 +51,12 @@ public class CartItemServiceImpl implements CartItemService {
         }
 
         return cartItemRepository.save(item);
+    }
+
+    
+    @Override
+    public List<CartItem> getItemsForCart(Long cartId) {
+        return cartItemRepository.findByCartId(cartId);
     }
 
     @Override

@@ -20,10 +20,12 @@ public class CartServiceImpl implements CartService {
         return cartRepository.save(cart);
     }
 
+    // ✅ METHOD NAME FIXED
     @Override
-    public Cart getActiveCart(Long userId) {
+    public Cart getActiveCartForUser(Long userId) {
         return cartRepository.findByUserIdAndActiveTrue(userId)
-                .orElseGet(() -> createCart(userId));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Active cart not found for user"));
     }
 
     @Override
