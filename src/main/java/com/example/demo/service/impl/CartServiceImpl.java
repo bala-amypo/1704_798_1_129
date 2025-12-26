@@ -20,6 +20,13 @@ public class CartServiceImpl implements CartService {
         return cartRepository.save(cart);
     }
 
+    // ✅ THIS FIXES ERROR #2
+    @Override
+    public Cart getCartById(Long id) {
+        return cartRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
+    }
+
     @Override
     public Cart getActiveCartForUser(Long userId) {
         return cartRepository.findByUserIdAndActiveTrue(userId)

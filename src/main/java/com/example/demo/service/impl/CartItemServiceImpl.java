@@ -42,7 +42,7 @@ public class CartItemServiceImpl implements CartItemService {
                 .orElse(null);
 
         if (item == null) {
-            item = new CartItem(); 
+            item = new CartItem();
             item.setCart(cart);
             item.setProduct(product);
             item.setQuantity(quantity);
@@ -56,6 +56,16 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public List<CartItem> getItemsForCart(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
+    }
+
+    // ✅ THIS FIXES ERROR #1
+    @Override
+    public CartItem updateCartItem(Long id, CartItem updatedItem) {
+        CartItem existing = cartItemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("CartItem not found"));
+
+        existing.setQuantity(updatedItem.getQuantity());
+        return cartItemRepository.save(existing);
     }
 
     @Override
