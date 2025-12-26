@@ -1,8 +1,10 @@
 package com.example.demo.service;
 
-import java.math.BigDecimal;
+import com.example.demo.model.DiscountApplication;
+import java.util.List;
 
 public interface DiscountService {
-
-    BigDecimal applyBundleDiscount(Long cartId);
+    List<DiscountApplication> evaluateDiscounts(Long cartId);
+    DiscountApplication getDiscountById(Long id);
+    List<DiscountApplication> getDiscountsForCart(Long cartId);
 }

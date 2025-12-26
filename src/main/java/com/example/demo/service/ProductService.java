@@ -1,17 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Product;
+import com.example.demo.model.Product;
 import java.util.List;
 
 public interface ProductService {
-
-    Product create(Product product);
-
-    Product update(Long id, Product product);
-
-    Product getById(Long id);
-
-    List<Product> getAll();
-
-    void deactivate(Long id);
+    Product createProduct(Product product);
+    Product updateProduct(Long id, Product product);
+    Product getProductById(Long id);
+    List<Product> getAllProducts();
+    void deactivateProduct(Long id);
 }
