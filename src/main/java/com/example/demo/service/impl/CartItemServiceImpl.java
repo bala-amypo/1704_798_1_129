@@ -24,8 +24,13 @@ public class CartItemServiceImpl implements CartItemService {
         this.productRepository = productRepository;
     }
 
+   
     @Override
-    public CartItem addItem(Long cartId, Long productId, int quantity) {
+    public CartItem addItemToCart(CartItem cartItem) {
+
+        Long cartId = cartItem.getCart().getId();
+        Long productId = cartItem.getProduct().getId();
+        int quantity = cartItem.getQuantity();
 
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
@@ -37,20 +42,20 @@ public class CartItemServiceImpl implements CartItemService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
-        CartItem item = cartItemRepository
+        CartItem existing = cartItemRepository
                 .findByCartIdAndProductId(cartId, productId)
                 .orElse(null);
 
-        if (item == null) {
-            item = new CartItem();
-            item.setCart(cart);
-            item.setProduct(product);
-            item.setQuantity(quantity);
+        if (existing == null) {
+            existing = new CartItem();
+            existing.setCart(cart);
+            existing.setProduct(product);
+            existing.setQuantity(quantity);
         } else {
-            item.setQuantity(item.getQuantity() + quantity);
+            existing.setQuantity(existing.getQuantity() + quantity);
         }
 
-        return cartItemRepository.save(item);
+        return cartItemRepository.save(existing);
     }
 
     @Override
@@ -58,19 +63,9 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemRepository.findByCartId(cartId);
     }
 
-    // ✅ THIS FIXES ERROR #1
     @Override
     public CartItem updateCartItem(Long id, CartItem updatedItem) {
         CartItem existing = cartItemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("CartItem not found"));
 
-        existing.setQuantity(updatedItem.getQuantity());
-        return cartItemRepository.save(existing);
-    }
-
-    @Override
-    public void removeCartItem(Long itemId) {
-        cartItemRepository.findById(itemId)
-                .ifPresent(cartItemRepository::delete);
-    }
-}
+        existing.setQua
