@@ -9,6 +9,9 @@ public interface CartRepository {
 
     Optional<Cart> findById(Long id);
 
-  
+    Optional<Cart> findByUserId(Long userId);
+
     Optional<Cart> findByUserIdAndActiveTrue(long userId);
+
+    void delete(Cart cart);
 }
