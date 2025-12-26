@@ -23,12 +23,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem addItemToCart(Long cartId, Long productId, int quantity) {
+    public CartItem addItem(Long cartId, Long productId, int quantity) {
 
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
 
-       
         if (!cart.getActive()) {
             throw new IllegalArgumentException("Cannot add items to inactive cart");
         }
@@ -41,7 +40,10 @@ public class CartItemServiceImpl implements CartItemService {
                 .orElse(null);
 
         if (item == null) {
-            item = new CartItem(cart, product, quantity);
+            item = new CartItem();   // ✅ NO-ARG constructor
+            item.setCart(cart);
+            item.setProduct(product);
+            item.setQuantity(quantity);
         } else {
             item.setQuantity(item.getQuantity() + quantity);
         }
@@ -50,7 +52,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void removeItem(Long itemId) {
+    public void removeCartItem(Long itemId) {
         cartItemRepository.findById(itemId)
                 .ifPresent(cartItemRepository::delete);
     }
