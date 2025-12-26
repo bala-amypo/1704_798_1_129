@@ -4,45 +4,51 @@ import com.example.demo.model.Cart;
 import com.example.demo.repository.CartRepository;
 import com.example.demo.service.CartService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
     
-    @Autowired
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
+    
+    public CartServiceImpl(CartRepository cartRepository) {
+        this.cartRepository = cartRepository;
+    }
     
     @Override
+    @Transactional
     public Cart createCart(Long userId) {
-        // Check if user already has a cart
-        Optional<Cart> existingCart = cartRepository.findByUserId(userId);
+        // Check if user already has an active cart
+        Optional<Cart> existingCart = cartRepository.findByUserIdAndActiveTrue(userId);
         if (existingCart.isPresent()) {
-            throw new IllegalArgumentException("Cart already exists for user");
+            throw new IllegalArgumentException("Cart already exists for this user");
         }
         
-        Cart cart = new Cart();
-        cart.setUserId(userId);
+        Cart cart = new Cart(userId);
         return cartRepository.save(cart);
     }
     
     @Override
     public Cart getActiveCartForUser(Long userId) {
-        return cartRepository.findByUserId(userId)
-            .orElseThrow(() -> new EntityNotFoundException("Cart not found for user"));
+        return cartRepository.findByUserIdAndActiveTrue(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Active cart not found"));
     }
     
     @Override
     public Cart getCartById(Long id) {
         return cartRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
     }
     
     @Override
+    @Transactional
     public void deactivateCart(Long id) {
-        Cart cart = getCartById(id);
-        // Since Cart model doesn't have active field, we delete the cart
-        cartRepository.delete(cart);
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
+        cart.setActive(false);
+        cartRepository.save(cart);
     }
 }
