@@ -20,7 +20,6 @@ public class CartServiceImpl implements CartService {
         return cartRepository.save(cart);
     }
 
-    // ✅ METHOD NAME FIXED
     @Override
     public Cart getActiveCartForUser(Long userId) {
         return cartRepository.findByUserIdAndActiveTrue(userId)

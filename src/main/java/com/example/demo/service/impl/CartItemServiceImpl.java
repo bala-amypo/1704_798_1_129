@@ -53,7 +53,6 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemRepository.save(item);
     }
 
-    
     @Override
     public List<CartItem> getItemsForCart(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
