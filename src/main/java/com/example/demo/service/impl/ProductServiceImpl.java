@@ -1,53 +1,79 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Product;
+import com.example.demo.model.Product;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
-    private final ProductRepository productRepository;
-
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    
+    @Autowired
+    private ProductRepository productRepository;
+    
+    private void validatePrice(BigDecimal price) {
+        if (price != null && price.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Price must be positive");
+        }
     }
-
-    @Override
-    public Product create(Product product) {
+    
+    public Product createProduct(Product product) {
+        validatePrice(product.getPrice());
+        
+        Optional<Product> existing = productRepository.findBySku(product.getSku());
+        if (existing.isPresent()) {
+            throw new IllegalArgumentException("SKU already exists");
+        }
+        
         return productRepository.save(product);
     }
-
-    @Override
-    public Product update(Long id, Product product) {
+    
+    public Product updateProduct(Long id, Product product) {
+        validatePrice(product.getPrice());
+        
         Product existing = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        existing.setSku(product.getSku());
-        existing.setName(product.getName());
-        existing.setPrice(product.getPrice());
-        existing.setActive(product.getActive());
-
+            .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        
+        // Check for SKU duplication if SKU is being changed
+        if (product.getSku() != null && !product.getSku().equals(existing.getSku())) {
+            Optional<Product> duplicateSku = productRepository.findBySku(product.getSku());
+            if (duplicateSku.isPresent()) {
+                throw new IllegalArgumentException("SKU already exists");
+            }
+        }
+        
+        if (product.getName() != null) {
+            existing.setName(product.getName());
+        }
+        if (product.getPrice() != null) {
+            existing.setPrice(product.getPrice());
+        }
+        if (product.getCategory() != null) {
+            existing.setCategory(product.getCategory());
+        }
+        if (product.getSku() != null) {
+            existing.setSku(product.getSku());
+        }
+        
         return productRepository.save(existing);
     }
-
-    @Override
-    public Product getById(Long id) {
+    
+    public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+            .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
-
-    @Override
-    public List<Product> getAll() {
+    
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
-
-    @Override
-    public void deactivate(Long id) {
-        Product product = getById(id);
+    
+    public void deactivateProduct(Long id) {
+        Product product = getProductById(id);
         product.setActive(false);
         productRepository.save(product);
     }

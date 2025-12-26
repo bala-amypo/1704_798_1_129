@@ -1,8 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.model.User;
+
 public interface AuthService {
-
-    String register(String email, String password, String role);
-
+    User register(User user);
     String login(String email, String password);
+    boolean validateToken(String token);
 }
