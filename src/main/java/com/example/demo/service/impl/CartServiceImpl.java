@@ -42,7 +42,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deactivateCart(Long id) {
         Cart cart = getCartById(id);
-       
+        // Since Cart model doesn't have active field, we delete the cart
         cartRepository.delete(cart);
     }
 }
