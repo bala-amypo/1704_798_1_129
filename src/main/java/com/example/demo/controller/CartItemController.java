@@ -2,39 +2,50 @@ package com.example.demo.controller;
 
 import com.example.demo.model.CartItem;
 import com.example.demo.service.CartItemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/cart-items")
+@Tag(name = "Cart Item Management", description = "APIs for managing items in shopping carts")
 public class CartItemController {
     
-    @Autowired
-    private CartItemService cartItemService;
+    private final CartItemService cartItemService;
+    
+    public CartItemController(CartItemService cartItemService) {
+        this.cartItemService = cartItemService;
+    }
     
     @PostMapping
-    public ResponseEntity<CartItem> addItemToCart(@RequestBody CartItem cartItem) {
-        CartItem added = cartItemService.addItemToCart(cartItem);
-        return ResponseEntity.ok(added);
+    @Operation(summary = "Add an item to cart")
+    public ResponseEntity<CartItem> addItem(@RequestBody CartItem item) {
+        CartItem added = cartItemService.addItemToCart(item);
+        return ResponseEntity.status(HttpStatus.CREATED).body(added);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<CartItem> updateItem(@PathVariable Long id, @RequestBody CartItem cartItem) {
-        CartItem updated = cartItemService.updateCartItem(id, cartItem);
+    @Operation(summary = "Update cart item quantity")
+    public ResponseEntity<CartItem> updateItem(@PathVariable Long id, @RequestParam Integer quantity) {
+        CartItem updated = cartItemService.updateItem(id, quantity);
         return ResponseEntity.ok(updated);
     }
     
     @GetMapping("/cart/{cartId}")
-    public ResponseEntity<List<CartItem>> listItems(@PathVariable Long cartId) {
+    @Operation(summary = "Get all items for a cart")
+    public ResponseEntity<List<CartItem>> getItemsForCart(@PathVariable Long cartId) {
         List<CartItem> items = cartItemService.getItemsForCart(cartId);
         return ResponseEntity.ok(items);
     }
     
     @DeleteMapping("/{id}")
+    @Operation(summary = "Remove an item from cart")
     public ResponseEntity<Void> removeItem(@PathVariable Long id) {
-        cartItemService.removeCartItem(id);
-        return ResponseEntity.ok().build();
+        cartItemService.removeItem(id);
+        return ResponseEntity.noContent().build();
     }
 }
