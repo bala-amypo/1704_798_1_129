@@ -1,40 +1,39 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.CartItem;
-import com.example.demo.service.CartItemService;
+import com.example.demo.model.Cart;
+import com.example.demo.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/cart-items")
-public class CartItemController {
+@RequestMapping("/api/carts")
+public class CartController {
     
     @Autowired
-    private CartItemService cartItemService;
+    private CartService cartService;
     
-    @PostMapping
-    public ResponseEntity<CartItem> addItemToCart(@RequestBody CartItem cartItem) {
-        CartItem added = cartItemService.addItemToCart(cartItem);
-        return ResponseEntity.ok(added);
+    @PostMapping("/{userId}")
+    public ResponseEntity<Cart> createCart(@PathVariable Long userId) {
+        Cart cart = cartService.createCart(userId);
+        return ResponseEntity.ok(cart);
     }
     
-    @PutMapping("/{id}")
-    public ResponseEntity<CartItem> updateItem(@PathVariable Long id, @RequestBody CartItem cartItem) {
-        CartItem updated = cartItemService.updateCartItem(id, cartItem);
-        return ResponseEntity.ok(updated);
+    @GetMapping("/{id}")
+    public ResponseEntity<Cart> getCart(@PathVariable Long id) {
+        Cart cart = cartService.getCartById(id);
+        return ResponseEntity.ok(cart);
     }
     
-    @GetMapping("/cart/{cartId}")
-    public ResponseEntity<List<CartItem>> listItems(@PathVariable Long cartId) {
-        List<CartItem> items = cartItemService.getItemsForCart(cartId);
-        return ResponseEntity.ok(items);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Cart> getCartByUser(@PathVariable Long userId) {
+        Cart cart = cartService.getActiveCartForUser(userId);
+        return ResponseEntity.ok(cart);
     }
     
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeItem(@PathVariable Long id) {
-        cartItemService.removeCartItem(id);
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateCart(@PathVariable Long id) {
+        cartService.deactivateCart(id);
         return ResponseEntity.ok().build();
     }
 }
