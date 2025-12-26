@@ -13,26 +13,24 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart createCartForUser(Long userId) {
-        Cart cart = new Cart(userId);
+    public Cart createCart(Long userId) {
+        Cart cart = new Cart();
+        cart.setUserId(userId);
         cart.setActive(true);
         return cartRepository.save(cart);
     }
 
     @Override
-    public Cart getActiveCartForUser(Long userId) {
-        return cartRepository
-                .findByUserIdAndActiveTrue(userId)
-                .orElseGet(() -> {
-                    Cart newCart = new Cart(userId);
-                    newCart.setActive(true);
-                    return cartRepository.save(newCart);
-                });
+    public Cart getActiveCart(Long userId) {
+        return cartRepository.findByUserIdAndActiveTrue(userId)
+                .orElseGet(() -> createCart(userId));
     }
 
     @Override
-    public void deleteCart(Long cartId) {
-        cartRepository.findById(cartId)
-                .ifPresent(cartRepository::delete);
+    public void deactivateCart(Long cartId) {
+        cartRepository.findById(cartId).ifPresent(cart -> {
+            cart.setActive(false);
+            cartRepository.save(cart);
+        });
     }
 }

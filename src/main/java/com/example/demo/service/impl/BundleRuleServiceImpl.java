@@ -15,20 +15,20 @@ public class BundleRuleServiceImpl implements BundleRuleService {
     }
 
     @Override
-    public BundleRule create(BundleRule bundleRule) {
-        validateDiscount(bundleRule);
-        return bundleRuleRepository.save(bundleRule);
+    public BundleRule createRule(BundleRule rule) {
+        validateDiscount(rule);
+        return bundleRuleRepository.save(rule);
     }
 
     @Override
-    public BundleRule update(Long id, BundleRule bundleRule) {
-        validateDiscount(bundleRule);
-        bundleRule.setId(id);
-        return bundleRuleRepository.save(bundleRule);
+    public BundleRule updateRule(Long id, BundleRule rule) {
+        validateDiscount(rule);
+        rule.setId(id);
+        return bundleRuleRepository.save(rule);
     }
 
     @Override
-    public BundleRule getById(Long id) {
+    public BundleRule getRule(Long id) {
         return bundleRuleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("BundleRule not found"));
     }
@@ -39,15 +39,14 @@ public class BundleRuleServiceImpl implements BundleRuleService {
     }
 
     @Override
-    public void deactivate(Long id) {
-        BundleRule rule = getById(id);
+    public void deactivateRule(Long id) {
+        BundleRule rule = getRule(id);
         rule.setActive(false);
         bundleRuleRepository.save(rule);
     }
 
-    private void validateDiscount(BundleRule bundleRule) {
-        if (bundleRule.getDiscountPercentage() <= 0 ||
-            bundleRule.getDiscountPercentage() > 100) {
+    private void validateDiscount(BundleRule rule) {
+        if (rule.getDiscountPercentage() <= 0 || rule.getDiscountPercentage() > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 1 and 100");
         }
     }
