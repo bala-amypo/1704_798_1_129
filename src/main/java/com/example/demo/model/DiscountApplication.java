@@ -17,7 +17,14 @@ public class DiscountApplication {
     private BundleRule bundleRule;
     
     private BigDecimal discountAmount;
+    
+    @Column(updatable = false)
     private LocalDateTime appliedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        appliedAt = LocalDateTime.now();
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
