@@ -8,6 +8,7 @@ public class BundleRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(unique = true)
     private String ruleName;
     private String requiredProductIds;
     private Double discountPercentage;
