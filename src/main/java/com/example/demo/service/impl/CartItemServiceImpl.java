@@ -24,7 +24,6 @@ public class CartItemServiceImpl implements CartItemService {
         this.productRepository = productRepository;
     }
 
-   
     @Override
     public CartItem addItemToCart(CartItem cartItem) {
 
@@ -68,4 +67,13 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem existing = cartItemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("CartItem not found"));
 
-        existing.setQua
+        existing.setQuantity(updatedItem.getQuantity());
+        return cartItemRepository.save(existing);
+    }
+
+    @Override
+    public void removeCartItem(Long itemId) {
+        cartItemRepository.findById(itemId)
+                .ifPresent(cartItemRepository::delete);
+    }
+}
